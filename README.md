@@ -74,21 +74,3 @@ It's a **minimum viable product built for live client demos**. It works end to e
 <img src="docs/panel-movil.png" alt="Dashboard on mobile" width="320">
 
 *The screenshots use sample receipts from fictional merchants, processed by Gemini through the same pipeline as real ones.*
-
-## Getting started
-
-Requirements: **Node.js 24 or later** and a **Gemini API key** (free from [Google AI Studio](https://aistudio.google.com/apikey)).
-
-```bash
-git clone https://github.com/violetaatkinson/gastos-whatsapp-ia.git
-cd gastos-whatsapp-ia
-npm install
-cp .env.example .env      # then paste your key into GEMINI_API_KEY
-npm start
-```
-
-1. Open <http://localhost:3000>. The first time, it shows the QR code.
-2. On your phone: **WhatsApp → Settings → Linked devices → Link a device** and scan the code.
-3. Send a photo of a receipt to that number (or to yourself in the "You" chat).
-
-The WhatsApp session is stored on your computer, so you don't need to scan again on every start.
