@@ -1,4 +1,4 @@
-# Gastos WhatsApp IA
+# Expenses WhatsApp IA
 
 **Automated employee expense management: send a photo of a receipt over WhatsApp, AI extracts the accounting data, and it shows up instantly in a web dashboard.**
 
