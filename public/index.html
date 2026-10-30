@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gastos · Panel de facturas</title>
+    <meta name="color-scheme" content="light dark">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2315803d'/%3E%3Cpath d='M10 9h12v15l-3-2-3 2-3-2-3 2z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <symbol id="i-overview" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></symbol>
+            <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></symbol>
+            <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+            <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+            <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></symbol>
+            <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+            <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+            <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+            <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v3"/><path d="M12 18v3"/><path d="m5.6 5.6 2.1 2.1"/><path d="m16.3 16.3 2.1 2.1"/><path d="M3 12h3"/><path d="M18 12h3"/><path d="m5.6 18.4 2.1-2.1"/><path d="m16.3 7.7 2.1-2.1"/></symbol>
+            <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M8 16H3v5"/></symbol>
+            <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol>
+            <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></symbol>
+            <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+        </defs>
+    </svg>
+
+    <div class="app">
+        <!-- Barra lateral -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <span class="brand-mark" aria-hidden="true"><svg><use href="#i-receipt"/></svg></span>
+                <div>
+                    <div class="brand-name" id="brand-name">Gastos</div>
+                    <div class="brand-sub">Gestión de facturas</div>
+                </div>
+            </div>
+
+            <nav class="nav" aria-label="Secciones">
+                <button class="nav-item is-active" data-view="overview"><svg><use href="#i-overview"/></svg>Resumen</button>
+                <button class="nav-item" data-view="invoices"><svg><use href="#i-receipt"/></svg>Facturas<span class="nav-count" id="nav-pending" hidden></span></button>
+                <button class="nav-item" data-view="employees"><svg><use href="#i-users"/></svg>Empleados</button>
+                <button class="nav-item" data-view="whatsapp"><svg><use href="#i-chat"/></svg>WhatsApp</button>
+            </nav>
+
+            <button class="wa-chip" id="wa-chip" data-view="whatsapp">
+                <span class="status-dot" data-status="starting"></span>
+                <span class="wa-chip-text">
+                    <span class="wa-chip-title" id="wa-chip-title">Conectando…</span>
+                    <span class="wa-chip-sub" id="wa-chip-sub">WhatsApp</span>
+                </span>
+            </button>
+        </aside>
+
+        <div class="main">
+            <header class="topbar">
+                <button class="btn btn-ghost icon menu-btn" id="menu-btn" aria-label="Menú"><svg><use href="#i-menu"/></svg></button>
+                <div class="topbar-title">
+                    <h1 id="page-title">Resumen</h1>
+                    <span class="client-tag" id="client-tag" hidden></span>
+                </div>
+                <div class="topbar-actions">
+                    <span class="live" id="live" title="Los datos se actualizan solos"><span class="live-dot"></span>En directo</span>
+                    <button class="btn btn-secondary" id="btn-upload"><svg><use href="#i-upload"/></svg><span>Subir factura</span></button>
+                    <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp,application/pdf" hidden>
+                </div>
+            </header>
+
+            <main class="content">
+                <!-- Resumen -->
+                <section id="view-overview" class="view">
+                    <div class="banner" id="connect-banner" hidden>
+                        <svg><use href="#i-chat"/></svg>
+                        <div>
+                            <strong>Vincula WhatsApp para empezar</strong>
+                            <span>Escanea el código QR con el móvil y las facturas que lleguen al chat aparecerán aquí al instante.</span>
+                        </div>
+                        <button class="btn btn-primary" data-view="whatsapp">Vincular ahora</button>
+                    </div>
+
+                    <div class="kpis" id="kpis"></div>
+
+                    <div class="grid grid-main">
+                        <div class="card">
+                            <div class="card-head">
+                                <div>
+                                    <h2>Gasto diario</h2>
+                                    <p class="muted">Últimos 30 días · por fecha de recepción</p>
+                                </div>
+                                <div class="card-figure" id="daily-figure"></div>
+                            </div>
+                            <div class="chart" id="daily-chart"></div>
+                        </div>
+
+                        <div class="card feed-card">
+                            <div class="card-head">
+                                <div>
+                                    <h2>Actividad en directo</h2>
+                                    <p class="muted">Facturas entrando por WhatsApp</p>
+                                </div>
+                            </div>
+                            <ol class="feed" id="feed"></ol>
+                            <div class="feed-empty" id="feed-empty">
+                                <div class="pulse-ring"><svg><use href="#i-chat"/></svg></div>
+                                <p>Esperando facturas…</p>
+                                <p class="muted">Envía una foto de una factura al WhatsApp vinculado.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <div class="card-head">
+                                <div>
+                                    <h2>Por categoría</h2>
+                                    <p class="muted">Este mes</p>
+                                </div>
+                            </div>
+                            <div id="categories"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-head">
+                                <div>
+                                    <h2>Por empleado</h2>
+                                    <p class="muted">Este mes</p>
+                                </div>
+                            </div>
+                            <div id="top-employees"></div>
+                        </div>
+                    </div>
+
+                    <div class="card table-card">
+                        <div class="card-head padded">
+                            <div>
+                                <h2>Últimas facturas</h2>
+                                <p class="muted">Extraídas automáticamente con IA</p>
+                            </div>
+                            <button class="btn btn-ghost" data-view="invoices">Ver todas</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Proveedor</th>
+                                        <th>Empleado</th>
+                                        <th>Fecha</th>
+                                        <th>Categoría</th>
+                                        <th class="num">Total</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-rows"></tbody>
+                            </table>
+                        </div>
+                        <div class="empty" id="recent-empty" hidden>
+                            <p><strong>Todavía no hay facturas</strong></p>
+                            <p class="muted">La primera que llegue aparecerá aquí sin recargar la página.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Facturas -->
+                <section id="view-invoices" class="view" hidden>
+                    <div class="stats-inline" id="stats"></div>
+
+                    <form class="filters" id="filters">
+                        <label>Desde <input type="date" name="from"></label>
+                        <label>Hasta <input type="date" name="to"></label>
+                        <label>Empleado <select name="employee"><option value="">Todos</option></select></label>
+                        <label>Categoría <select name="category"><option value="">Todas</option></select></label>
+                        <label>Estado
+                            <select name="status">
+                                <option value="">Todos</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="aprobado">Aprobada</option>
+                                <option value="rechazado">Rechazada</option>
+                            </select>
+                        </label>
+                        <label class="grow">Buscar <input type="search" name="q" placeholder="Proveedor, NIF, nº factura…"></label>
+                        <a id="export" class="btn btn-secondary" href="/api/export.csv"><svg><use href="#i-download"/></svg>Exportar CSV</a>
+                    </form>
+
+                    <div class="card table-card">
+                        <div class="table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Proveedor</th>
+                                        <th>Empleado</th>
+                                        <th>Categoría</th>
+                                        <th class="num">Base</th>
+                                        <th class="num">IVA</th>
+                                        <th class="num">Total</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoice-rows"></tbody>
+                            </table>
+                        </div>
+                        <div class="empty" id="invoices-empty" hidden>
+                            <p><strong>No hay facturas</strong></p>
+                            <p class="muted">Cuando un empleado envíe una foto al WhatsApp aparecerá aquí.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Empleados -->
+                <section id="view-employees" class="view" hidden>
+                    <p class="lead muted" id="employees-lead"></p>
+                    <form class="card add-employee" id="employee-form">
+                        <label>Nombre <input name="name" required placeholder="Ana García"></label>
+                        <label>Teléfono <input name="phone" required placeholder="+34 612 345 678" inputmode="tel"></label>
+                        <label>Departamento <input name="department" placeholder="Comercial"></label>
+                        <button class="btn btn-primary" type="submit">Añadir empleado</button>
+                    </form>
+
+                    <div class="card table-card">
+                        <div class="table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Teléfono</th>
+                                        <th>Departamento</th>
+                                        <th class="num">Facturas</th>
+                                        <th class="num">Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="employee-rows"></tbody>
+                            </table>
+                        </div>
+                        <div class="empty" id="employees-empty" hidden>
+                            <p><strong>Aún no hay empleados</strong></p>
+                            <p class="muted">Se dan de alta solos al enviar su primera factura, o puedes añadirlos arriba.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- WhatsApp -->
+                <section id="view-whatsapp" class="view" hidden>
+                    <div class="card wa-card">
+                        <div class="wa-left">
+                            <span class="eyebrow" id="wa-eyebrow">Vinculación</span>
+                            <h2 class="wa-title" id="wa-title">Conecta el WhatsApp de la empresa</h2>
+                            <p class="muted" id="wa-desc">Los empleados envían la foto de la factura a este número y el sistema la registra sola.</p>
+
+                            <ol class="steps" id="wa-steps">
+                                <li><span class="step-n">1</span><p>Abre <strong>WhatsApp</strong> en el móvil.</p></li>
+                                <li><span class="step-n">2</span><p>Ve a <strong>Ajustes → Dispositivos vinculados</strong>.</p></li>
+                                <li><span class="step-n">3</span><p>Pulsa <strong>Vincular un dispositivo</strong> y escanea el código.</p></li>
+                            </ol>
+
+                            <dl class="wa-account" id="wa-account" hidden>
+                                <div><dt>Cuenta</dt><dd id="wa-name">—</dd></div>
+                                <div><dt>Número</dt><dd id="wa-phone">—</dd></div>
+                                <div><dt>Conectado desde</dt><dd id="wa-since">—</dd></div>
+                            </dl>
+
+                            <div class="wa-howto" id="wa-howto" hidden>
+                                <strong>Cómo probarlo</strong>
+                                <p class="muted">Desde otro móvil, envía la foto de una factura a <strong id="wa-howto-phone"></strong>. Con un solo móvil, envíatela en el chat <strong>«Tú» (mensaje a ti mismo)</strong>.</p>
+                            </div>
+
+                            <div class="wa-actions">
+                                <button class="btn btn-secondary" id="wa-reconnect"><svg><use href="#i-refresh"/></svg>Reconectar</button>
+                                <button class="btn btn-danger-ghost" id="wa-logout" hidden><svg><use href="#i-logout"/></svg>Desvincular</button>
+                            </div>
+                            <p class="fineprint"><svg><use href="#i-shield"/></svg>La sesión se guarda solo en este equipo.</p>
+                        </div>
+
+                        <div class="wa-right">
+                            <div class="qr-frame" id="qr-frame" data-status="starting">
+                                <img id="qr-img" alt="Código QR para vincular WhatsApp" width="280" height="280" hidden>
+                                <div class="qr-placeholder" id="qr-placeholder">
+                                    <div class="spinner"></div>
+                                    <p id="qr-placeholder-text">Generando código…</p>
+                                </div>
+                                <div class="qr-connected" id="qr-connected" hidden>
+                                    <div class="check-badge"><svg><use href="#i-check"/></svg></div>
+                                    <p><strong>WhatsApp conectado</strong></p>
+                                    <p class="muted">Listo para recibir facturas</p>
+                                </div>
+                            </div>
+                            <p class="qr-hint muted" id="qr-hint">El código se renueva automáticamente.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Detalle de factura -->
+    <div class="overlay" id="overlay" hidden></div>
+    <aside class="drawer" id="drawer" aria-hidden="true" aria-labelledby="drawer-title">
+        <div class="drawer-head">
+            <div>
+                <h2 id="drawer-title">Factura</h2>
+                <p class="muted" id="drawer-sub"></p>
+            </div>
+            <button class="btn btn-ghost icon" id="drawer-close" aria-label="Cerrar"><svg><use href="#i-x"/></svg></button>
+        </div>
+        <div class="drawer-body">
+            <div class="preview" id="preview"></div>
+            <div id="alerts"></div>
+            <form id="invoice-form" class="form-grid"></form>
+            <div id="lines"></div>
+        </div>
+        <div class="drawer-foot">
+            <button class="btn btn-danger-ghost" id="btn-delete">Eliminar</button>
+            <div class="spacer"></div>
+            <button class="btn btn-secondary" id="btn-reject">Rechazar</button>
+            <button class="btn btn-secondary" id="btn-save">Guardar</button>
+            <button class="btn btn-primary" id="btn-approve"><svg><use href="#i-check"/></svg>Aprobar</button>
+        </div>
+    </aside>
+
+    <div class="dropzone" id="dropzone" hidden>
+        <div class="dropzone-inner">
+            <svg><use href="#i-upload"/></svg>
+            <p><strong>Suelta la factura aquí</strong></p>
+            <p class="muted">Se procesará igual que si llegara por WhatsApp</p>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+
+    <script src="app.js" type="module"></script>
+</body>
+</html>

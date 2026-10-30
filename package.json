@@ -1,0 +1,22 @@
+{
+  "name": "gastos-whatsapp-ia",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env --disable-warning=ExperimentalWarning src/server.js",
+    "dev": "node --watch-path=src --env-file-if-exists=.env --disable-warning=ExperimentalWarning src/server.js",
+    "extract": "node --env-file-if-exists=.env --disable-warning=ExperimentalWarning src/extract-file.js",
+    "bot:meta": "node --env-file-if-exists=.env --disable-warning=ExperimentalWarning src/bot.js",
+    "reset": "node --env-file-if-exists=.env --disable-warning=ExperimentalWarning src/reset.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.32.0",
+    "@whiskeysockets/baileys": "^7.0.0-rc14",
+    "express": "^5.2.1",
+    "pino": "^10.4.0",
+    "qrcode": "^1.5.4",
+    "zod": "^4.6.5"
+  },
+  "description": "Gestión de facturas de gastos por WhatsApp (Baileys) con extracción por IA (Gemini)"
+}
