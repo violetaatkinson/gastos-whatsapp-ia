@@ -99,7 +99,8 @@ const isOverloaded = (err) => [429, 500, 503, 504].includes(err?.status)
 
 /** Llama al modelo adaptándose a lo que acepte: esquema JSON, nivel de razonamiento y modelo de respaldo. */
 async function generateWithFallback(parts) {
-    const models = [...new Set([MODEL, FALLBACK_MODEL])];
+    // Principal → respaldo → principal otra vez: las saturaciones de Gemini suelen durar segundos.
+    const models = [MODEL, FALLBACK_MODEL, MODEL];
     let lastError;
     for (const model of models) {
         const opts = { withSchema: true, thinking: true };

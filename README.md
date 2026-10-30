@@ -53,9 +53,25 @@ Es un **producto mínimo viable para hacer demos a clientes**. Funciona de verda
 - **Subida manual**: arrastrar una imagen o PDF al panel la procesa igual que si llegara por WhatsApp.
 - Diseño corporativo, modo oscuro automático y adaptado a móvil.
 
-| Detalle de una factura | Vincular WhatsApp |
+## Capturas
+
+**Listado de facturas**, con la imagen recibida por WhatsApp, los importes extraídos y el estado de revisión:
+
+![Listado de facturas](docs/listado-facturas.png)
+
+**Detalle de una factura**: la imagen original junto a los datos que ha leído la IA, listos para revisar y aprobar:
+
+![Detalle de factura](docs/detalle-factura.png)
+
+**Vinculación de WhatsApp** escaneando el código QR desde el panel:
+
+![Vincular WhatsApp](docs/vincular-whatsapp.png)
+
+| Modo oscuro | En el móvil |
 |---|---|
-| ![Detalle de factura](docs/detalle-factura.png) | ![Vincular WhatsApp](docs/vincular-whatsapp.png) |
+| ![Panel en modo oscuro](docs/panel-oscuro.png) | <img src="docs/panel-movil.png" alt="Panel en el móvil" width="300"> |
+
+*Las capturas usan facturas de ejemplo de comercios ficticios, procesadas por Gemini con el mismo flujo que en producción.*
 
 ## Puesta en marcha
 
@@ -74,68 +90,3 @@ npm start
 3. Envía la foto de una factura a ese número (o a ti mismo en el chat «Tú»).
 
 La sesión de WhatsApp se guarda en el equipo: no hace falta volver a escanear en cada arranque.
-
-## Comandos
-
-| Comando | Qué hace |
-|---|---|
-| `npm start` | Panel web y bot de WhatsApp en <http://localhost:3000> |
-| `npm run dev` | Igual, reiniciando al cambiar el código |
-| `npm run reset` | Borra facturas y empleados (mantiene WhatsApp vinculado) |
-| `npm run extract -- samples/factura-restaurante.png` | Prueba la extracción con Gemini sobre un archivo, sin WhatsApp |
-| `npm run bot:meta` | Bot alternativo con la API oficial de WhatsApp Business (ver más abajo) |
-
-## Configuración (`.env`)
-
-| Variable | Para qué |
-|---|---|
-| `GEMINI_API_KEY` | **Obligatoria.** Clave para leer las facturas |
-| `GEMINI_MODEL` | Modelo principal. Por defecto `gemini-3.6-flash` (unos 3 s por factura) |
-| `GEMINI_FALLBACK_MODEL` | Se usa si el principal está saturado o no responde en 30 s. Por defecto `gemini-3.8-flash` |
-| `BRAND_NAME` | Nombre del producto en el panel (por defecto «Gastos») |
-| `CLIENT_NAME` | Nombre de la empresa a la que se hace la demo; aparece en la cabecera |
-| `ALLOW_ANY_SENDER` | `true` (por defecto): cualquiera que escriba queda dado de alta. `false`: solo los empleados añadidos en el panel |
-| `PORT` | Puerto del panel (3000) |
-
-## Cómo está hecho
-
-| Pieza | Tecnología |
-|---|---|
-| WhatsApp | [Baileys](https://github.com/WhiskeySockets/Baileys) (protocolo de WhatsApp Web, vinculación por QR) |
-| Lectura de facturas | Gemini a través de `@google/genai`, con salida JSON validada con Zod |
-| Servidor | Node.js + Express, en un único proceso |
-| Tiempo real | Server-Sent Events (`/api/events`) |
-| Base de datos | SQLite integrado en Node (`node:sqlite`) |
-| Panel | HTML, CSS y JavaScript sin framework |
-
-| Ruta | Contenido |
-|---|---|
-| `src/server.js` | Servidor: panel, API, eventos en tiempo real y arranque del bot |
-| `src/lib/baileys.js` | WhatsApp: QR, reconexión, recepción de fotos y PDF, respuestas |
-| `src/lib/processor.js` | Proceso común a todos los canales: Gemini → guardar → confirmar → avisar al panel |
-| `src/lib/extract.js` | Instrucciones y esquema de extracción para Gemini, con modelo de respaldo |
-| `src/lib/db.js` | Base de datos SQLite (`data/app.db`) |
-| `src/lib/events.js` | Bus de eventos en tiempo real |
-| `public/` | Panel web |
-| `src/bot.js`, `src/lib/whatsapp.js` | Alternativa con la API oficial de Meta |
-
-La carpeta `data/` (base de datos, imágenes de facturas y sesión de WhatsApp) y el archivo `.env` contienen datos personales y credenciales: están excluidos del repositorio.
-
-## Problemas frecuentes
-
-| Problema | Solución |
-|---|---|
-| El QR no aparece o caduca | Se renueva solo; si se queda parado, pulsa *Reconectar* en la sección WhatsApp |
-| «Sesión cerrada» | Se desvinculó desde el móvil: aparece un QR nuevo automáticamente |
-| Vincular otro número | *WhatsApp → Desvincular* y escanea con el otro móvil |
-| «La clave de Gemini no es válida» | Revisa `GEMINI_API_KEY` en `.env` y reinicia |
-| «Ya hay un servidor en marcha» | Solo puede haber uno a la vez (dos procesos se disputarían la sesión de WhatsApp); cierra el otro |
-| Un mensaje no llega al panel | Mira la consola: cada mensaje recibido queda registrado. `BAILEYS_LOG=info` muestra más detalle |
-
-## Del MVP a producción
-
-- **WhatsApp oficial.** Baileys no es una API oficial y WhatsApp puede bloquear números que detecte como automatizados: para las demos, usa un número de prueba. En producción, el canal es la **API de WhatsApp Business de Meta**. `src/bot.js` ya la implementa y comparte base de datos y procesado con la demo.
-- **Acceso al panel.** Ahora solo es accesible desde el propio ordenador (`127.0.0.1`); para publicarlo hay que añadir usuarios y contraseñas.
-- **Integraciones** directas con el programa contable de cada cliente (Holded, Odoo, A3, Sage…). Hoy la integración es la exportación CSV.
-- **Varias empresas** en la misma instalación, con los datos separados por cliente.
-- **Digitalización certificada (AEAT)** si se quiere poder destruir el papel original.

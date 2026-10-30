@@ -437,7 +437,7 @@ async function openInvoice(id) {
     $('#overlay').hidden = false;
     $('#drawer').classList.add('is-open');
     $('#drawer').setAttribute('aria-hidden', 'false');
-    $('#drawer-close').focus();
+    $('#drawer-close').focus({ focusVisible: false });
 }
 
 function closeDrawer() {
