@@ -1,92 +1,94 @@
 # Gastos WhatsApp IA
 
-**Gestión automática de gastos de empleados: envías la foto de la factura por WhatsApp, la IA extrae los datos contables y aparecen al instante en un panel web.**
+**Automated employee expense management: send a photo of a receipt over WhatsApp, AI extracts the accounting data, and it shows up instantly in a web dashboard.**
 
-![Panel de resumen](docs/panel-resumen.png)
+![Dashboard overview](docs/panel-resumen.png)
 
-## El problema
+> The dashboard and the bot are in Spanish: the product targets companies in Spain (Spanish VAT rules, NIF/CIF tax IDs, simplified invoices).
 
-Los comerciales y técnicos que viajan acumulan facturas de restaurantes, gasolineras, hoteles, parkings y peajes. Hoy la empresa tiene dos opciones, y ninguna funciona bien:
+## The problem
 
-- **Meter las facturas a mano**, línea a línea, en el sistema contable. Es lento y da errores.
-- **Instalar una app de gastos por suscripción** que los empleados acaban olvidando.
+Sales reps and field technicians who travel pile up receipts from restaurants, gas stations, hotels, parking lots and tolls. Today companies have two options, and neither works well:
 
-## La solución
+- **Typing receipts in by hand**, line by line, into the accounting system. It's slow and error-prone.
+- **Rolling out a subscription expense app** that employees end up forgetting to use.
 
-El empleado ya tiene WhatsApp abierto todo el día. Solo tiene que **hacer una foto a la factura y enviarla a un número de la empresa**:
+## The solution
 
-1. El bot recibe la imagen (o el PDF) y responde al momento.
-2. **Gemini** (IA de Google con visión) lee la factura y extrae proveedor, NIF, número, fecha y hora, base imponible, desglose de IVA, total, propina, forma de pago y categoría del gasto.
-3. El bot **confirma en el chat** con el resumen de los datos.
-4. La factura **aparece en el panel web en tiempo real**, con la imagen original, sin recargar la página.
-5. Administración revisa, aprueba o rechaza, y **exporta a CSV** para el programa contable.
+Employees already have WhatsApp open all day. All they have to do is **snap a photo of the receipt and send it to a company number**:
+
+1. The bot receives the image (or PDF) and replies right away.
+2. **Gemini** (Google's vision-capable AI) reads the receipt and extracts the merchant, tax ID, invoice number, date and time, net amount, VAT breakdown, total, tip, payment method and expense category.
+3. The bot **confirms in the chat** with a summary of the data.
+4. The receipt **appears in the web dashboard in real time**, with the original image, without reloading the page.
+5. The admin reviews, approves or rejects, and **exports to CSV** for the accounting software.
 
 ```
-Empleado ──foto──▶ WhatsApp ──▶ Gemini (visión) ──▶ Base de datos ──▶ Panel web en tiempo real ──▶ CSV / ERP
-          ◀──── confirmación con el desglose ────┘
+Employee ──photo──▶ WhatsApp ──▶ Gemini (vision) ──▶ Database ──▶ Real-time dashboard ──▶ CSV / ERP
+          ◀──── confirmation with the breakdown ────┘
 ```
 
-## Para qué sirve este MVP
+## What this MVP is for
 
-Es un **producto mínimo viable para hacer demos a clientes**. Funciona de verdad de principio a fin y se ejecuta en un solo ordenador, sin servidores ni configuración compleja:
+It's a **minimum viable product built for live client demos**. It works end to end and runs on a single computer, with no servers or complex setup:
 
-- **Validar la idea** con empresas reales: lo que hace el empleado (enviar una foto por WhatsApp) es el mismo que tendría en producción.
-- **Enseñar el valor en directo**: el cliente envía una factura desde su móvil y la ve aparecer en el panel en unos 3 segundos.
-- **Servir de base técnica** para la versión de producción: el procesado y la base de datos ya están separados del canal de WhatsApp.
+- **Validate the idea** with real companies: the employee experience (sending a photo on WhatsApp) is the same one they'd have in production.
+- **Show the value live**: the client sends a receipt from their own phone and watches it appear in the dashboard about 3 seconds later.
+- **Serve as the technical foundation** for a production version: the processing pipeline and the database are already decoupled from the WhatsApp channel.
 
-## Funcionalidades
+## Features
 
-**En WhatsApp**
-- Vinculación escaneando un **código QR desde el panel**, igual que WhatsApp Web.
-- Acepta fotos (JPG, PNG, WEBP) y PDF.
-- Reacciona con ⏳ al recibir la factura y con ✅ al registrarla, y responde con el desglose.
-- Comandos: **resumen** (gasto del mes), **borrar** (elimina la última factura pendiente) y **ayuda**.
-- Avisa si la imagen no es una factura, si está borrosa o si parece duplicada.
-- Para probar con un solo móvil, basta con enviarse la foto en el chat «Tú» (mensaje a ti mismo).
+**On WhatsApp**
+- Linking by **scanning a QR code from the dashboard**, just like WhatsApp Web.
+- Accepts photos (JPG, PNG, WEBP) and PDFs.
+- Reacts with ⏳ when a receipt arrives and ✅ once it's saved, then replies with the breakdown.
+- Commands: **resumen** (monthly spend), **borrar** (deletes the last pending receipt) and **ayuda** (help).
+- Warns when the image isn't a receipt, is unreadable, or looks like a duplicate.
+- To test with a single phone, just send the photo to yourself in the "You" (message yourself) chat.
 
-**En el panel web**
-- **Tiempo real**: avisos y actividad en directo mientras la factura se procesa (recibida → leyendo con IA → registrada).
-- **Resumen**: gasto del mes, número de facturas, IVA deducible, pendientes de revisar, gasto diario de los últimos 30 días y desglose por categoría y por empleado.
-- **Facturas**: listado con miniatura de la imagen, filtros (fechas, empleado, categoría, estado, búsqueda) y exportación a CSV compatible con Excel en español.
-- **Detalle de factura**: imagen original junto a los datos extraídos, todos editables. Avisos de revisión cuando la lectura tiene baja confianza o los importes no cuadran. Botones para aprobar o rechazar.
-- **Empleados**: se dan de alta solos con su nombre de perfil de WhatsApp al enviar la primera factura; también se pueden añadir a mano.
-- **Subida manual**: arrastrar una imagen o PDF al panel la procesa igual que si llegara por WhatsApp.
-- Diseño corporativo, modo oscuro automático y adaptado a móvil.
+**In the web dashboard**
+- **Real time**: notifications and a live activity feed while the receipt is processed (received → reading with AI → saved).
+- **Overview**: monthly spend, number of receipts, deductible VAT, receipts pending review, daily spend over the last 30 days, and breakdowns by category and by employee.
+- **Receipts**: list with a thumbnail of the image, filters (dates, employee, category, status, search) and CSV export compatible with Spanish-locale Excel.
+- **Receipt detail**: the original image next to the extracted data, all editable. Review warnings when the reading has low confidence or the amounts don't add up. Approve and reject buttons.
+- **Employees**: registered automatically with their WhatsApp profile name when they send their first receipt; they can also be added by hand.
+- **Manual upload**: dragging an image or PDF onto the dashboard processes it exactly as if it had arrived over WhatsApp.
+- Corporate dark design, responsive down to mobile.
 
-## Capturas
+## Screenshots
 
-**Listado de facturas**, con la imagen recibida por WhatsApp, los importes extraídos y el estado de revisión:
+**Receipt list**, with the image received over WhatsApp, the extracted amounts and the review status:
 
-![Listado de facturas](docs/listado-facturas.png)
+![Receipt list](docs/listado-facturas.png)
 
-**Detalle de una factura**: la imagen original junto a los datos que ha leído la IA, listos para revisar y aprobar:
+**Receipt detail**: the original image next to the data read by the AI, ready to review and approve:
 
-![Detalle de factura](docs/detalle-factura.png)
+![Receipt detail](docs/detalle-factura.png)
 
-**Vinculación de WhatsApp** escaneando el código QR desde el panel:
+**Linking WhatsApp** by scanning the QR code from the dashboard:
 
-![Vincular WhatsApp](docs/vincular-whatsapp.png)
+![Link WhatsApp](docs/vincular-whatsapp.png)
 
-| Modo oscuro | En el móvil |
-|---|---|
-| ![Panel en modo oscuro](docs/panel-oscuro.png) | <img src="docs/panel-movil.png" alt="Panel en el móvil" width="300"> |
+**On mobile**:
 
-*Las capturas usan facturas de ejemplo de comercios ficticios, procesadas por Gemini con el mismo flujo que en producción.*
+<img src="docs/panel-movil.png" alt="Dashboard on mobile" width="320">
 
-## Puesta en marcha
+*The screenshots use sample receipts from fictional merchants, processed by Gemini through the same pipeline as real ones.*
 
-Requisitos: **Node.js 24 o superior** y una **clave de la API de Gemini** (gratuita en [Google AI Studio](https://aistudio.google.com/apikey)).
+## Getting started
+
+Requirements: **Node.js 24 or later** and a **Gemini API key** (free from [Google AI Studio](https://aistudio.google.com/apikey)).
 
 ```bash
 git clone https://github.com/violetaatkinson/gastos-whatsapp-ia.git
 cd gastos-whatsapp-ia
 npm install
-cp .env.example .env      # y pega tu clave en GEMINI_API_KEY
+cp .env.example .env      # then paste your key into GEMINI_API_KEY
 npm start
 ```
 
-1. Abre <http://localhost:3000>. La primera vez se muestra el código QR.
-2. En el móvil: **WhatsApp → Ajustes → Dispositivos vinculados → Vincular un dispositivo** y escanea el código.
-3. Envía la foto de una factura a ese número (o a ti mismo en el chat «Tú»).
+1. Open <http://localhost:3000>. The first time, it shows the QR code.
+2. On your phone: **WhatsApp → Settings → Linked devices → Link a device** and scan the code.
+3. Send a photo of a receipt to that number (or to yourself in the "You" chat).
 
-La sesión de WhatsApp se guarda en el equipo: no hace falta volver a escanear en cada arranque.
+The WhatsApp session is stored on your computer, so you don't need to scan again on every start.
